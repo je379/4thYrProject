@@ -186,7 +186,7 @@ b = bar([V2.P12.FOM/sys_eff; V2.P20.FOM/sys_eff; V3.P20.FOM/sys_eff; mean(APC_da
 % legend('Flying Test Bed and Motor', 'Blades', 'Exit Duct', 'Blade Duct', 'Inlet', 'Location', 'northeast'); 
 xticks([1,2,3,4]);
 xticklabels({'Fan A', 'Fan B', 'Fan C', 'Propeller'});
-ylabel('$M_{F,s}$', 'Interpreter', 'Latex', 'FontSize', 12); ylim([0 1.75]);
+ylabel('$M_{F,s}$', 'Interpreter', 'Latex', 'FontSize', 15); ylim([0 1.75]);
 grid on; box on;
 
 xtips1 = b(1).XEndPoints(1); ytips1 = b(1).YEndPoints(1);
@@ -277,7 +277,7 @@ sig = SIG(phi, psi);
 % [h,C1] = contour(phi, psi, WF_WP); clabel(h,C1);
 legend('\sigma = 1', 'Symmetric diffuser limit', 'Location', 'northwest');
 set(gcf, 'Position', [500 300 300 300]);
-xlabel('$\phi_m$', 'Interpreter', 'Latex');ylabel('$\psi_m$', 'Interpreter', 'Latex');
+xlabel('$\phi_m$', 'Interpreter', 'Latex', 'FontSize',15);ylabel('$\psi_m$', 'Interpreter', 'Latex', 'FontSize',15);
 c = colorbar;
 c.Ticks = [0 1/7 2/7 3/7 4/7 5/7 6/7 1];
 c.TickLabels = [0.8 0.83 0.87 0.9 0.91 0.92 0.93 0.94];
@@ -382,13 +382,15 @@ area_rhs(area_rhs < 0) = NaN;
 
 figure(25); hold on; box on; grid on;
 xlabel('$\Lambda = A_{x,fan} / A_{x,prop.}$', 'Interpreter', 'Latex', 'FontSize', 12);
-ylabel('$\frac{W_P}{g} / kg$', 'Interpreter', 'Latex', 'FontSize', 12);
-set(gcf, 'Position', [500 300 600 300]);
+xlabel('$A_{x,fan} / A_{x,prop.}$', 'Interpreter', 'Latex', 'FontSize', 15);
+% ylabel('$\frac{W_P}{g} / kg$', 'Interpreter', 'Latex', 'FontSize', 12);
+% ylabel('$W / kg$', 'Interpreter', 'Latex', 'FontSize', 15);
+set(gcf, 'Position', [500 300 300 300]);
 
 for a =1:n
     for b =1:n
         [mass_p, ~] = MassModel_SIG(sig_rhs, rc_rhs(a,b), rh_rhs(a,b), payload(a,b));
-        LHS(a,b) = mass_p.total./ mass_p.prop;
+        LHS(a,b) = mass_p.CRDF./ mass_p.prop;
         RHS(a,b) = ( ((1.36/0.67)^2 * area_rhs(a,b)) ./ (1*pi*(0.254/2)^2) ).^(1/3);%( (2*sig_rhs*area_rhs) ./ (1*pi*(0.254/2)^2) ).^(1/3);
         omega(a,b) = sqrt(2*sig_rhs.*(mass_p.total*9.81/4) ./ (1.225*pi*0.8^2*rc_rhs(a,b).^4.*(1-0.2.^4)) );
     end
@@ -399,16 +401,19 @@ LHS_min = LHS((RHS - LHS) == po);
 rc_max = rc_rhs((RHS - LHS) == po);
 htr_max = HTR_rhs((RHS - LHS) == po);
 
-contourf((area_rhs./((pi*(0.254/2)^2))), payload, (RHS - LHS), [-10 -1 -0.5 -0.25 0 0.25 0.5 1]);
+contourf((area_rhs./((pi*(0.254/2)^2))), payload, (RHS - LHS), [-10 -5 -3 -2 -1 -0.5 -0.25 0 0.25 0.5 1], 'LineColor','None');
 c = colorbar;
 c.Label.String = '\Sigma';
 colormap(redblue(50));
 plot([0 0], [0 0], 'k');
 % plot([min(min((area_rhs./((pi*(0.254/2)^2))))) max(max((area_rhs./((pi*(0.254/2)^2)))))], [1 1], '-.k','LineWidth',2);
-[C,h] = contour((area_rhs./((pi*(0.254/2)^2))), payload, omega*30/pi, [1500 2000 3000 4000 6000  10000 20000 50000] ); clabel(C,h);
+% [C,h] = contour((area_rhs./((pi*(0.254/2)^2))), payload, omega*30/pi, [1500 2000 3000 4000 6000  10000 20000 50000] ); clabel(C,h);
+[C,h] = contour((area_rhs./((pi*(0.254/2)^2))), payload, (RHS - LHS), [-10 -5 -3 -2 -1 -0.5 -0.25 0 0.25 0.5 1] ); clabel(C,h);
 caxis([-1 1]);
-legend('\Sigma', 'RPM', 'Location', 'southeast');
+% legend('\Sigma', 'RPM', 'Location', 'southeast');
+legend('\Sigma', 'Location', 'southeast');
 ylim([0.5,15]);
+xlim([0.014 2.381]);
 
 %% Operating speed
 rho = 1.225;

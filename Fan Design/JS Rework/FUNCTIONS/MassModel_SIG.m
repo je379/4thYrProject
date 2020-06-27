@@ -64,7 +64,7 @@ t = 1e-3; % 1 mm
 mass.inlet = (rhoPLA/1240) .* (3.90 * (rc - rh) .* (3*rc - rh + 0.001));
 
 %% Blade Passage
-mass.annul =  ((2e-3)/(5e-3))^2 .* (rhoPLA/1240) .* (2.73*rh + 0.818*rc - 0.0062); % ((2e-3)/(5e-3))^2 .*
+mass.annul = ((2e-3)/(5e-3))^2 .* (rhoPLA/1240) .* (2.73*rh + 0.818*rc - 0.0062); % ((2e-3)/(5e-3))^2 .*
 
 %% Blades
 mass.blade = (rhoPLA/1240) .* (17.5*(rc.^2 - rh.^2));
