@@ -1,22 +1,24 @@
-%% Light-weight Fan Design Code
+%% Light-weight Design Code for Ducted Fan Blades
 % Master
 clear all;
 close all;
 
 global plotflag crdfflag
 plotflag = 1;
-contourflag = 0;
 crdfflag = 0;
+contourflag = 0;
 
 %% Set globals
 rho = 1.225;
 
 phi.m = 0.8; %0.8
 psi.m = 0.25; %0.25
+
 if crdfflag==1
     phi.m = 0.8;
     psi.m = phi.m*phi.m*0.125/(0.8*0.8);
 end
+
 psi_ts.m = 2*psi.m - phi.m^2;      % Total to Total stage loading = p02 - p01 / (0.5*rho*U^2)
 
 rc = 60e-3;
